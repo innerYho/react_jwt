@@ -79,13 +79,22 @@ const Register = () => {
             //clear input fields 
 
         } catch (error) {
-
+            if (!err?.response) {
+                setErrMsg('No server response') //error 500
+            } else if (err.response?.status === 409) {
+                // username is use for other person
+                setErrMsg('Username Taken')
+            } else {
+                setErrMsg('Registration failed')
+            }
+            //focus on that error field
+            errRef.current.focus()
         }
     }
 
     return (
         <>
-            {success ? (
+            {success ? (//validation form withOut back
                 <section>
                     <h1>Success!</h1>
                     <p>
@@ -154,7 +163,6 @@ const Register = () => {
                             <FontAwesomeIcon icon={faInfoCircle} />
                             Must match the first password input field.
                         </p>
-                        {/* //25:29 */}
                         <button disabled={!validName || !validPwd || !validMatch ? true : false}>Sign Up</button>
                     </form>
                     <p>
